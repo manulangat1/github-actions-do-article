@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command:  gunicorn do-guide.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+
+    image: manulangat/auto-deploy-do-github-actions:latest
+    ports:
+      - "8000:8000"
+    networks:
+      - bms_staging
+  
+
+volumes:
+  static_volume:
+  
+networks:
+  bms_staging:
+    

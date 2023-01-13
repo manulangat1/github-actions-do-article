@@ -1,0 +1,19 @@
+#!/bin/bash 
+
+
+set -o errexit 
+
+set -o pipefail 
+
+set -o nounset 
+
+
+
+
+echo "I am ready and running.."
+
+python3 manage.py migrate
+
+
+
+exec "$@"
