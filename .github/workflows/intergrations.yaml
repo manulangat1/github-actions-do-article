@@ -28,3 +28,27 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to dockerhub
+        run: |
+          docker-compose push
+
+      - name: stop containers
+        run: docker-compose -f docker-compose.yaml down --volumes
+
+      - name: Executing remote  command and deployment to digital ocean for dev enviroment
+        uses: appleboy/ssh-action@master
+        with:
+          host: "64.227.99.127"
+          USERNAME: "root"
+          PORT: 22
+          KEY: ${{ secrets.DO_PRIVATE_KEY}}
+          script: |
+            cd django-ci-example/
+            docker system prune -af
+            docker compose  -f docker-compose.staging.yaml down --volumes
+            echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
+            docker system prune -af
+            docker compose -f docker-compose.staging.yaml pull
+            docker compose -f docker-compose.staging.yaml  up --build --remove-orphans -d --force-recreate
+            # docker-compose -f docker-compose.staging.yaml up  --build  -d

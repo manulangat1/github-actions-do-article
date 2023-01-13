@@ -12,9 +12,9 @@ services:
     env_file:
        - ./.env
     networks:
-      - bms_staging
+      - django-ci-example
   
   
 networks:
-  bms_staging:
+  django-ci-example:
     

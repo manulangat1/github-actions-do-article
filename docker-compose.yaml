@@ -13,12 +13,12 @@ services:
     ports:
       - "8000:8000"
     networks:
-      - bms_staging
+      - django-ci-example
   
 
 volumes:
   static_volume:
   
 networks:
-  bms_staging:
+  django-ci-example:
     
